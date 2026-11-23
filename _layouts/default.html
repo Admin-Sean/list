@@ -8,7 +8,9 @@
   <meta name="theme-color" content="#f6f7f9" media="(prefers-color-scheme: light)">
   <title>{{ page.title | default: site.title }}</title>
   <meta name="description" content="{{ site.description }}">
-  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+  <style>
+{% include style.css %}
+  </style>
 </head>
 <body>
   <main class="wrap">

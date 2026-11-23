@@ -15,6 +15,6 @@ Every push to `main` automatically publishes a new GitHub Release (tag like `v20
 
 ## Editing
 
-Edit `index.md` (plain Markdown lists, one item per bullet). Styling is in `assets/css/style.css`.
+Edit `index.md` (plain Markdown lists, one item per bullet). Styling is in `_includes/style.css` (inlined into the page, so it works under any base URL).
 
 Preview locally (optional): `gem install jekyll && jekyll serve`.
