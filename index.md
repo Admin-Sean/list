@@ -33,6 +33,7 @@ title: Sean's Christmas/Birthday List
 - K1 radio programming cable with an FTDI or CH340 chip, not Prolific [Amazon](https://www.amazon.com/dp/B078T5KZSH){: .chip}
 - Dual-band (2 m / 70 cm) NMO antenna for my Jeep [Amazon](https://www.amazon.com/dp/B00SU0W3XO){: .chip}
 - SMA to BNC adapter kit [Amazon](https://www.amazon.com/dp/B0F6YC34B6){: .chip}
+- Baofeng DM-32UV handheld radio [Amazon](https://www.amazon.com/dp/B0FQTHVXFJ){: .chip}
 
 ## Automotive
 
