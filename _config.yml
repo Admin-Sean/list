@@ -1,0 +1,11 @@
+title: Sean's Wishlist
+description: Christmas / Birthday list (updated 2025)
+# For a project site (https://USER.github.io/REPO) set baseurl to "/REPO".
+# For a user site (REPO named USER.github.io) leave it empty.
+baseurl: ""
+url: ""
+markdown: kramdown
+exclude:
+  - README.md
+  - .github
+  - .gitignore
