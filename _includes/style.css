@@ -1,184 +1,134 @@
+/* Design notes
+   Direction: a printed parts list / spec sheet, centered like a menu.
+   - Warm near-black + one amber accent (signal-lamp colour), no indigo/violet, no gradients, no glow.
+   - No cards: items are ruled rows. Hairlines do the grouping.
+   - No emoji, no side stripes. Sections are numbered with a CSS counter.
+   - Mono for labels/links, plain sans for body. Type scale is a 1.25 ratio.
+   - Accent is reserved for: section numbers, links, hover. Red only means "sold out".
+*/
 :root {
   color-scheme: dark light;
-  --bg: #0b0d12;
-  --surface: #151922;
-  --surface-h: #1b2030;
-  --border: #262c3b;
-  --text: #eceef3;
-  --muted: #8f97a8;
-  --accent: #8ab4ff;
-  --accent-2: #c58bff;
-  --glow-1: rgba(138, 180, 255, .16);
-  --glow-2: rgba(197, 139, 255, .13);
-  --chip-bg: rgba(138, 180, 255, .12);
-  --chip-bd: rgba(138, 180, 255, .35);
-  --shadow: 0 6px 24px rgba(0, 0, 0, .35);
+  --bg: #0e0e0c;
+  --text: #e9e6dd;
+  --muted: #8b887d;
+  --rule: #2b2a25;
+  --accent: #ffb000;
+  --danger: #ff7a6b;
+  --mono: ui-monospace, "SF Mono", "Cascadia Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  --sans: "Helvetica Neue", Helvetica, Arial, "Segoe UI", Roboto, sans-serif;
+  /* 1.25 modular scale */
+  --s-1: .8rem; --s0: 1rem; --s1: 1.25rem; --s3: 1.95rem; --s5: 3.05rem;
 }
 @media (prefers-color-scheme: light) {
   :root {
-    --bg: #f5f6fa;
-    --surface: #ffffff;
-    --surface-h: #fbfbfe;
-    --border: #e1e4ec;
-    --text: #181b24;
-    --muted: #5d6677;
-    --accent: #1f5fe0;
-    --accent-2: #8a3fe0;
-    --glow-1: rgba(31, 95, 224, .10);
-    --glow-2: rgba(138, 63, 224, .08);
-    --chip-bg: rgba(31, 95, 224, .08);
-    --chip-bd: rgba(31, 95, 224, .28);
-    --shadow: 0 6px 20px rgba(24, 27, 36, .08);
+    --bg: #f3f1ec;
+    --text: #1b1a17;
+    --muted: #6c695f;
+    --rule: #d9d5ca;
+    --accent: #a85a00;
+    --danger: #b3261e;
   }
 }
 * { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+html { -webkit-text-size-adjust: 100%; }
 body {
   margin: 0;
   min-height: 100vh;
+  background: var(--bg);
   color: var(--text);
+  font: var(--s0)/1.5 var(--sans);
   text-align: center;
-  font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  background:
-    radial-gradient(900px 500px at 10% -10%, var(--glow-1), transparent 60%),
-    radial-gradient(800px 500px at 100% 0%, var(--glow-2), transparent 55%),
-    var(--bg);
-  background-attachment: fixed;
+  counter-reset: sec;
   padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
-.wrap { max-width: 880px; margin: 0 auto; padding: 32px 14px 72px; }
+.wrap { max-width: 34rem; margin: 0 auto; padding: 56px 20px 96px; }
 
 h1 {
-  font-size: clamp(1.8rem, 8vw, 3rem);
-  line-height: 1.1;
-  letter-spacing: -.02em;
-  margin: 12px 0 10px;
-  background: linear-gradient(120deg, var(--accent), var(--accent-2));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  margin: 0 0 18px;
+  font-size: clamp(2rem, 9.5vw, var(--s5));
+  line-height: 1.02;
+  font-weight: 700;
+  letter-spacing: -.035em;
+  text-wrap: balance;
 }
-h1 + p { margin: 0 0 8px; }
+h1 + p { margin: 0; }
 h1 + p em {
-  display: inline-block;
-  font-style: normal;
-  font-size: .85rem;
+  font: normal var(--s-1)/1.4 var(--mono);
+  letter-spacing: .06em;
+  text-transform: uppercase;
   color: var(--muted);
-  border: 1px solid var(--border);
-  background: var(--surface);
-  border-radius: 999px;
-  padding: 4px 14px;
 }
 
 h2 {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  font-size: .8rem;
-  font-weight: 700;
+  margin: 72px 0 0;
+  padding-bottom: 14px;
+  font: 600 var(--s-1)/1.2 var(--mono);
+  letter-spacing: .16em;
   text-transform: uppercase;
-  letter-spacing: .14em;
+  color: var(--text);
+  border-bottom: 1px solid var(--text);
+}
+h2::before {
+  counter-increment: sec;
+  content: counter(sec, decimal-leading-zero);
+  display: block;
+  margin-bottom: 10px;
   color: var(--accent);
-  margin: 40px 0 16px;
+  letter-spacing: .2em;
 }
-h2::before, h2::after {
-  content: "";
-  flex: 1;
-  max-width: 120px;
-  height: 1px;
-}
-h2::before { background: linear-gradient(270deg, var(--border), transparent); }
-h2::after  { background: linear-gradient(90deg, var(--border), transparent); }
 
-/* flex (not grid) so a last odd card is centered, not stuck left */
-ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-}
+ul { list-style: none; margin: 0; padding: 0; }
 li {
-  position: relative;
-  flex: 1 1 100%;
-  max-width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 2px 4px;
-  min-height: 64px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 16px 16px 14px;
+  padding: 15px 4px;
+  border-bottom: 1px solid var(--rule);
   overflow-wrap: anywhere;
-  box-shadow: var(--shadow);
-  transition: transform .15s ease, border-color .15s ease, background .15s ease;
-}
-li::before {
-  content: "";
-  position: absolute;
-  top: 0; left: 50%;
-  width: 44px; height: 3px;
-  transform: translateX(-50%);
-  border-radius: 0 0 3px 3px;
-  background: linear-gradient(90deg, var(--accent), var(--accent-2));
-}
-li:hover { transform: translateY(-2px); border-color: var(--chip-bd); background: var(--surface-h); }
-@media (min-width: 640px) {
-  li { flex: 0 1 calc(50% - 5px); }
+  text-wrap: pretty;
 }
 
-a { color: var(--accent); text-underline-offset: 3px; text-decoration-thickness: 1px; }
-a:hover, a:focus-visible { text-decoration-thickness: 2px; }
-a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+a {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+a:hover, a:focus-visible { color: var(--accent); }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
+/* store links: small mono labels, not buttons */
 a.chip {
-  display: inline-flex;
-  align-items: center;
-  min-height: 36px;               /* comfortable tap target */
-  margin: 2px 2px 2px 4px;
-  padding: 0 14px;
-  font-size: .86rem;
-  font-weight: 600;
+  display: inline-block;
+  padding: 9px 6px;               /* 44px-ish tap target on touch */
+  margin: -9px 0;
+  font: 600 var(--s-1)/1 var(--mono);
+  letter-spacing: .04em;
+  text-transform: uppercase;
   text-decoration: none;
   color: var(--accent);
-  background: var(--chip-bg);
-  border: 1px solid var(--chip-bd);
-  border-radius: 999px;
   white-space: nowrap;
-  -webkit-tap-highlight-color: transparent;
 }
-a.chip::after { content: "\2197"; margin-left: 6px; font-size: .9em; }
-a.chip:hover { background: var(--chip-bd); }
-a.chip:active { transform: scale(.97); }
+a.chip::before { content: "["; color: var(--muted); }
+a.chip::after  { content: " \2197]"; color: var(--muted); }
+a.chip:hover { text-decoration: underline; text-underline-offset: 4px; }
 
 .tag {
   display: inline-block;
-  padding: 1px 10px;
-  font-size: .74rem;
+  margin-left: 4px;
+  padding: 2px 7px;
+  font: 700 .7rem/1.2 var(--mono);
   font-style: normal;
-  font-weight: 700;
+  letter-spacing: .1em;
   text-transform: uppercase;
-  letter-spacing: .06em;
-  color: #ff9d9d;
-  background: rgba(255, 99, 99, .12);
-  border: 1px solid rgba(255, 99, 99, .35);
-  border-radius: 999px;
+  color: var(--danger);
+  border: 1px solid currentColor;
+  border-radius: 2px;
+  vertical-align: 1px;
 }
-@media (prefers-color-scheme: light) { .tag { color: #c23030; } }
 
-@media (prefers-reduced-motion: no-preference) {
-  li { animation: rise .4s ease both; }
-  @keyframes rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@media (min-width: 640px) {
+  .wrap { padding-top: 96px; }
+  li { padding: 17px 4px; }
 }
-@media (prefers-reduced-motion: reduce) { li { transition: none; } }
-@media (hover: none) { li:hover { transform: none; } }
 @media (max-width: 380px) {
-  body { font-size: 15px; }
-  li { padding: 14px 12px 12px; }
+  .wrap { padding-left: 16px; padding-right: 16px; }
 }
