@@ -4,6 +4,8 @@
    - Items are ruled rows. Each item = name on top, store link underneath (one thing per line).
    - Body 18px, generous row spacing; mono only for small labels and links.
    - Accent is reserved for section numbers, links and hover. Red only means "sold out".
+  - Background: a few slow-drifting soft blobs behind a frosted blur layer, so the motion
+    reads as ambient colour and never competes with the text. Stops for reduced-motion.
 */
 :root {
   color-scheme: dark light;
@@ -13,6 +15,10 @@
   --rule: #302f29;
   --accent: #ffb000;
   --danger: #ff8577;
+  --blob-1: #ffb000;
+  --blob-2: #d9480f;
+  --blob-3: #7a5c1e;
+  --veil: rgb(14 14 12 / .55);
   --mono: ui-monospace, "SF Mono", "Cascadia Mono", "JetBrains Mono", Menlo, Consolas, monospace;
   --sans: "Helvetica Neue", Helvetica, Arial, "Segoe UI", Roboto, sans-serif;
 }
@@ -24,21 +30,76 @@
     --rule: #d6d2c6;
     --accent: #9a5200;
     --danger: #b3261e;
+    --blob-1: #f2a31b;
+    --blob-2: #e8743b;
+    --blob-3: #d8c08a;
+    --veil: rgb(243 241 236 / .55);
   }
 }
 * { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; background: var(--bg); }
 body {
   margin: 0;
   min-height: 100vh;
-  background: var(--bg);
   color: var(--text);
   font: 1.125rem/1.55 var(--sans);   /* 18px */
   text-align: center;
   counter-reset: sec;
   padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
-.wrap { max-width: 36rem; margin: 0 auto; padding: 48px 22px 112px; }
+/* animated background + blur */
+.bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  background: var(--bg);
+}
+.bg i {
+  position: absolute;
+  border-radius: 50%;
+  opacity: .7;
+  will-change: transform;
+}
+.bg i:nth-child(1) {
+  width: 60vmax; height: 60vmax;
+  top: -20vmax; left: -15vmax;
+  background: var(--blob-1);
+  animation: drift-a 26s ease-in-out infinite alternate;
+}
+.bg i:nth-child(2) {
+  width: 52vmax; height: 52vmax;
+  bottom: -18vmax; right: -14vmax;
+  background: var(--blob-2);
+  animation: drift-b 32s ease-in-out infinite alternate;
+}
+.bg i:nth-child(3) {
+  width: 40vmax; height: 40vmax;
+  top: 35%; left: 40%;
+  background: var(--blob-3);
+  animation: drift-c 38s ease-in-out infinite alternate;
+}
+.bg::after {              /* the blur layer sitting over the animation */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--veil);
+  -webkit-backdrop-filter: blur(70px) saturate(1.2);
+  backdrop-filter: blur(70px) saturate(1.2);
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .bg i { filter: blur(70px); }
+  .bg::after { background: color-mix(in srgb, var(--bg) 70%, transparent); }
+}
+@keyframes drift-a { to { transform: translate3d(35vmax, 25vmax, 0) scale(1.15); } }
+@keyframes drift-b { to { transform: translate3d(-40vmax, -20vmax, 0) scale(.9); } }
+@keyframes drift-c { to { transform: translate3d(-25vmax, 30vmax, 0) scale(1.25); } }
+@media (prefers-reduced-motion: reduce) {
+  .bg i { animation: none; }
+}
+
+.wrap { position: relative; max-width: 36rem; margin: 0 auto; padding: 48px 22px 112px; }
 
 h1 {
   margin: 0 0 16px;
