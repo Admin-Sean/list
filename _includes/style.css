@@ -6,7 +6,10 @@
    - Accent is reserved for section numbers, links and hover. Red only means "sold out".
   - Background: four soft, elongated colour fields (amber, ember, teal, gold) drifting slowly over the
     near-black, a moderate backdrop blur over them, and a fine grain on top. Colour comes from the fields
-    themselves, with only a light veil, so it stays rich instead of washing out. Stops for reduced-motion.
+    themselves, with only a light veil, so it stays rich instead of washing out.
+    Motion is tied to scroll position (see the script in the layout): scrolling down plays the scene
+    forward, scrolling up plays it back, so the page and background read as one system. No scroll, no
+    movement. Static for reduced-motion.
 */
 :root {
   color-scheme: dark light;
@@ -69,15 +72,21 @@ body {
   border-radius: 50%;
   background: radial-gradient(closest-side, var(--c), transparent);
   will-change: transform;
+  /* paused 1s animation; --p (0..1, set from scroll) picks the frame via a negative delay */
+  animation-duration: 1s;
+  animation-timing-function: linear;
+  animation-fill-mode: both;
+  animation-play-state: paused;
+  animation-delay: calc(var(--p, 0) * -1s);
 }
 .bg i:nth-child(1) { --c: var(--blob-1); width: 78vmax; height: 52vmax; top: -14vmax; left: -22vmax;
-  opacity: .55; animation: drift-a 41s ease-in-out infinite alternate; }
+  opacity: .55; animation-name: drift-a; }
 .bg i:nth-child(2) { --c: var(--blob-2); width: 82vmax; height: 50vmax; bottom: -20vmax; right: -24vmax;
-  opacity: .5;  animation: drift-b 47s ease-in-out infinite alternate; }
+  opacity: .5;  animation-name: drift-b; }
 .bg i:nth-child(3) { --c: var(--blob-3); width: 60vmax; height: 38vmax; top: 34%; left: -16vmax;
-  opacity: .45; animation: drift-c 53s ease-in-out infinite alternate; }
+  opacity: .45; animation-name: drift-c; }
 .bg i:nth-child(4) { --c: var(--blob-4); width: 42vmax; height: 28vmax; top: 6%; right: -6vmax;
-  opacity: .24; animation: drift-d 37s ease-in-out infinite alternate; }
+  opacity: .24; animation-name: drift-d; }
 
 .bg::after {              /* the blur layer sitting over the colour fields */
   content: "";
