@@ -18,12 +18,19 @@
     {{ content }}
   </main>
   <script>
-    /* Scroll-linked background: --p goes 0 -> 1 as you scroll top -> bottom, and back again going up.
-       Same pace as the scroll (linear), eased slightly so it glides instead of stepping. */
+    /* Background motion = always-on idle drift (pure CSS) + scroll layer.
+       --p goes 0 -> 1 as you scroll top -> bottom and back again going up (same pace as the scroll).
+       While you scroll, the idle drift also speeds up, then eases back to normal. */
     (function () {
       var root = document.documentElement;
       if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-      var target = 0, current = 0, raf = 0;
+      var idle = [];
+      try {
+        idle = document.getAnimations().filter(function (a) {
+          return a.animationName && a.animationName.indexOf("idle-") === 0;
+        });
+      } catch (e) {}
+      var target = 0, current = 0, lastY = window.pageYOffset || 0, boost = 0, raf = 0;
       function measure() {
         var max = root.scrollHeight - window.innerHeight;
         var y = window.pageYOffset || root.scrollTop || 0;
@@ -31,10 +38,19 @@
         if (!raf) raf = requestAnimationFrame(tick);
       }
       function tick() {
+        var y = window.pageYOffset || 0;
+        var speed = Math.min(Math.abs(y - lastY) / 30, 1.5);  /* scroll speed this frame, capped */
+        lastY = y;
+        boost += (speed - boost) * 0.08;                       /* rises with scrolling, decays when it stops */
         current += (target - current) * 0.14;
         if (Math.abs(target - current) < 0.0005) current = target;
         root.style.setProperty("--p", current.toFixed(4));
-        raf = current === target ? 0 : requestAnimationFrame(tick);
+        var rate = 1 + boost * 1.6;                            /* 1x idle, up to ~3x while scrolling hard */
+        for (var i = 0; i < idle.length; i++) {
+          try { idle[i].updatePlaybackRate(rate); } catch (e) { idle[i].playbackRate = rate; }
+        }
+        raf = (current === target && boost < 0.003) ? 0 : requestAnimationFrame(tick);
+        if (!raf && idle.length) for (var j = 0; j < idle.length; j++) { try { idle[j].updatePlaybackRate(1); } catch (e) {} }
       }
       window.addEventListener("scroll", measure, { passive: true });
       window.addEventListener("resize", measure);
