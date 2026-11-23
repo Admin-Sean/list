@@ -11,12 +11,7 @@ Static wishlist page for GitHub Pages. Content lives in `index.md`; dark/light m
 
 ## Releases
 
-```sh
-git tag v1.0.0
-git push origin v1.0.0
-```
-
-`.github/workflows/release.yml` builds the site and attaches `wishlist-site-<tag>.zip` (rendered HTML) and `wishlist-source-<tag>.zip` to a GitHub Release.
+Every push to `main` automatically publishes a new GitHub Release (tag like `v2026.11.23-7`) via `.github/workflows/release.yml`, with `wishlist-site-<tag>.zip` (rendered HTML) and `wishlist-source-<tag>.zip` attached. You can also run it manually from the Actions tab.
 
 ## Editing
 
