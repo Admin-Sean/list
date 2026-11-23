@@ -1,31 +1,28 @@
 /* Design notes
-   Direction: a printed parts list / spec sheet, centered like a menu.
-   - Warm near-black + one amber accent (signal-lamp colour), no indigo/violet, no gradients, no glow.
-   - No cards: items are ruled rows. Hairlines do the grouping.
-   - No emoji, no side stripes. Sections are numbered with a CSS counter.
-   - Mono for labels/links, plain sans for body. Type scale is a 1.25 ratio.
-   - Accent is reserved for: section numbers, links, hover. Red only means "sold out".
+   Direction: a printed parts list, centered like a menu.
+   - Warm near-black + one amber accent. No indigo, gradients, glow, cards, emoji or side stripes.
+   - Items are ruled rows. Each item = name on top, store link underneath (one thing per line).
+   - Body 18px, generous row spacing; mono only for small labels and links.
+   - Accent is reserved for section numbers, links and hover. Red only means "sold out".
 */
 :root {
   color-scheme: dark light;
   --bg: #0e0e0c;
-  --text: #e9e6dd;
-  --muted: #8b887d;
-  --rule: #2b2a25;
+  --text: #f0ede4;
+  --muted: #a8a599;
+  --rule: #302f29;
   --accent: #ffb000;
-  --danger: #ff7a6b;
+  --danger: #ff8577;
   --mono: ui-monospace, "SF Mono", "Cascadia Mono", "JetBrains Mono", Menlo, Consolas, monospace;
   --sans: "Helvetica Neue", Helvetica, Arial, "Segoe UI", Roboto, sans-serif;
-  /* 1.25 modular scale */
-  --s-1: .8rem; --s0: 1rem; --s1: 1.25rem; --s3: 1.95rem; --s5: 3.05rem;
 }
 @media (prefers-color-scheme: light) {
   :root {
     --bg: #f3f1ec;
     --text: #1b1a17;
-    --muted: #6c695f;
-    --rule: #d9d5ca;
-    --accent: #a85a00;
+    --muted: #5f5c52;
+    --rule: #d6d2c6;
+    --accent: #9a5200;
     --danger: #b3261e;
   }
 }
@@ -36,50 +33,53 @@ body {
   min-height: 100vh;
   background: var(--bg);
   color: var(--text);
-  font: var(--s0)/1.5 var(--sans);
+  font: 1.125rem/1.55 var(--sans);   /* 18px */
   text-align: center;
   counter-reset: sec;
   padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
-.wrap { max-width: 34rem; margin: 0 auto; padding: 56px 20px 96px; }
+.wrap { max-width: 36rem; margin: 0 auto; padding: 48px 22px 112px; }
 
 h1 {
-  margin: 0 0 18px;
-  font-size: clamp(2rem, 9.5vw, var(--s5));
-  line-height: 1.02;
+  margin: 0 0 16px;
+  font-size: clamp(2.1rem, 10vw, 3.2rem);
+  line-height: 1.05;
   font-weight: 700;
-  letter-spacing: -.035em;
+  letter-spacing: -.03em;
   text-wrap: balance;
 }
 h1 + p { margin: 0; }
 h1 + p em {
-  font: normal var(--s-1)/1.4 var(--mono);
-  letter-spacing: .06em;
-  text-transform: uppercase;
+  font: normal .9rem/1.5 var(--mono);
+  letter-spacing: .04em;
   color: var(--muted);
 }
 
 h2 {
-  margin: 72px 0 0;
-  padding-bottom: 14px;
-  font: 600 var(--s-1)/1.2 var(--mono);
-  letter-spacing: .16em;
+  margin: 64px 0 4px;
+  padding-bottom: 16px;
+  font: 600 .95rem/1.2 var(--mono);
+  letter-spacing: .12em;
   text-transform: uppercase;
-  color: var(--text);
-  border-bottom: 1px solid var(--text);
+  border-bottom: 2px solid var(--text);
 }
 h2::before {
   counter-increment: sec;
   content: counter(sec, decimal-leading-zero);
   display: block;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   color: var(--accent);
+  font-size: .85rem;
   letter-spacing: .2em;
 }
 
 ul { list-style: none; margin: 0; padding: 0; }
 li {
-  padding: 15px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 22px 6px;
   border-bottom: 1px solid var(--rule);
   overflow-wrap: anywhere;
   text-wrap: pretty;
@@ -95,39 +95,32 @@ a {
 a:hover, a:focus-visible { color: var(--accent); }
 a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
-/* store links: small mono labels, not buttons */
+/* store link: its own line under the item, readable, easy to tap */
 a.chip {
-  display: inline-block;
-  padding: 9px 6px;               /* 44px-ish tap target on touch */
-  margin: -9px 0;
-  font: 600 var(--s-1)/1 var(--mono);
-  letter-spacing: .04em;
-  text-transform: uppercase;
-  text-decoration: none;
+  display: block;
+  padding: 8px 12px;
+  font: 500 .95rem/1.3 var(--mono);
   color: var(--accent);
-  white-space: nowrap;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 5px;
 }
-a.chip::before { content: "["; color: var(--muted); }
-a.chip::after  { content: " \2197]"; color: var(--muted); }
-a.chip:hover { text-decoration: underline; text-underline-offset: 4px; }
+a.chip::after { content: " \2197"; text-decoration: none; display: inline-block; }
 
 .tag {
-  display: inline-block;
-  margin-left: 4px;
-  padding: 2px 7px;
-  font: 700 .7rem/1.2 var(--mono);
+  padding: 2px 8px;
+  font: 700 .72rem/1.3 var(--mono);
   font-style: normal;
   letter-spacing: .1em;
   text-transform: uppercase;
   color: var(--danger);
   border: 1px solid currentColor;
   border-radius: 2px;
-  vertical-align: 1px;
 }
 
 @media (min-width: 640px) {
-  .wrap { padding-top: 96px; }
-  li { padding: 17px 4px; }
+  .wrap { padding-top: 88px; }
+  li { padding: 24px 6px; }
 }
 @media (max-width: 380px) {
   .wrap { padding-left: 16px; padding-right: 16px; }

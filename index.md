@@ -18,7 +18,7 @@ title: Sean's Christmas/Birthday List
 
 ## Electronics and soldering
 
-- A pack of ESP32 [Amazon](https://www.amazon.com/dp/B0F1MS5S8R){: .chip} or Raspberry Pi Pico [Amazon](https://www.amazon.com/s?k=raspberry+pi+pico+2+pack){: .chip} boards
+- A pack of ESP32 or Raspberry Pi Pico boards [ESP32 on Amazon](https://www.amazon.com/dp/B0F1MS5S8R){: .chip} [Pico on Amazon](https://www.amazon.com/s?k=raspberry+pi+pico+2+pack){: .chip}
 - Adafruit [fingerprint sensor](https://www.adafruit.com/product/4651)
 - Resistor kit [Amazon](https://www.amazon.com/dp/B08FD1XVL6){: .chip}
 - Soldering flux, no-clean paste [Amazon](https://www.amazon.com/s?k=no+clean+flux+paste){: .chip}
@@ -42,7 +42,7 @@ title: Sean's Christmas/Birthday List
 ## Clothes
 
 - Nice sweatshirts (black, grey)
-- Milwaukee heated hoodie [link](https://www.redtoolstore.com/products/milwaukee-306b-20-m12-heated-hoodie-black-hoodie-only){: .chip} *sold out*{: .tag}
+- Milwaukee heated hoodie *sold out*{: .tag} [Red Tool Store](https://www.redtoolstore.com/products/milwaukee-306b-20-m12-heated-hoodie-black-hoodie-only){: .chip}
 
 ## Snacks
 
