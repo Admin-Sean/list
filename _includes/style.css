@@ -4,21 +4,24 @@
    - Items are ruled rows. Each item = name on top, store link underneath (one thing per line).
    - Body 18px, generous row spacing; mono only for small labels and links.
    - Accent is reserved for section numbers, links and hover. Red only means "sold out".
-  - Background: a few slow-drifting soft blobs behind a frosted blur layer, so the motion
-    reads as ambient colour and never competes with the text. Stops for reduced-motion.
+  - Background: four soft, elongated colour fields (amber, ember, teal, gold) drifting slowly over the
+    near-black, a moderate backdrop blur over them, and a fine grain on top. Colour comes from the fields
+    themselves, with only a light veil, so it stays rich instead of washing out. Stops for reduced-motion.
 */
 :root {
   color-scheme: dark light;
   --bg: #0e0e0c;
   --text: #f0ede4;
-  --muted: #a8a599;
-  --rule: #302f29;
+  --muted: #bdbaae;
+  --rule: rgb(240 237 228 / .16);
   --accent: #ffb000;
   --danger: #ff8577;
-  --blob-1: #ffb000;
-  --blob-2: #d9480f;
-  --blob-3: #7a5c1e;
-  --veil: rgb(14 14 12 / .55);
+  --blob-1: #e08a00;
+  --blob-2: #d4461f;
+  --blob-3: #0f8a80;
+  --blob-4: #f2c14e;
+  --veil: rgb(14 14 12 / .14);
+  --grain: .11;
   --mono: ui-monospace, "SF Mono", "Cascadia Mono", "JetBrains Mono", Menlo, Consolas, monospace;
   --sans: "Helvetica Neue", Helvetica, Arial, "Segoe UI", Roboto, sans-serif;
 }
@@ -26,14 +29,16 @@
   :root {
     --bg: #f3f1ec;
     --text: #1b1a17;
-    --muted: #5f5c52;
-    --rule: #d6d2c6;
+    --muted: #4f4c43;
+    --rule: rgb(27 26 23 / .16);
     --accent: #9a5200;
     --danger: #b3261e;
-    --blob-1: #f2a31b;
-    --blob-2: #e8743b;
-    --blob-3: #d8c08a;
-    --veil: rgb(243 241 236 / .55);
+    --blob-1: #ffb000;
+    --blob-2: #ff7a45;
+    --blob-3: #34b5aa;
+    --blob-4: #ffd166;
+    --veil: rgb(243 241 236 / .14);
+    --grain: .16;
   }
 }
 * { box-sizing: border-box; }
@@ -56,45 +61,68 @@ body {
   pointer-events: none;
   background: var(--bg);
 }
+/* colour fields: radial gradients already fade to transparent, so no filter is needed
+   on them (filter: blur on big moving layers is the expensive way to do this) */
 .bg i {
   position: absolute;
+  z-index: 0;
   border-radius: 50%;
-  opacity: .7;
+  background: radial-gradient(closest-side, var(--c), transparent);
   will-change: transform;
 }
-.bg i:nth-child(1) {
-  width: 60vmax; height: 60vmax;
-  top: -20vmax; left: -15vmax;
-  background: var(--blob-1);
-  animation: drift-a 26s ease-in-out infinite alternate;
-}
-.bg i:nth-child(2) {
-  width: 52vmax; height: 52vmax;
-  bottom: -18vmax; right: -14vmax;
-  background: var(--blob-2);
-  animation: drift-b 32s ease-in-out infinite alternate;
-}
-.bg i:nth-child(3) {
-  width: 40vmax; height: 40vmax;
-  top: 35%; left: 40%;
-  background: var(--blob-3);
-  animation: drift-c 38s ease-in-out infinite alternate;
-}
-.bg::after {              /* the blur layer sitting over the animation */
+.bg i:nth-child(1) { --c: var(--blob-1); width: 78vmax; height: 52vmax; top: -14vmax; left: -22vmax;
+  opacity: .55; animation: drift-a 41s ease-in-out infinite alternate; }
+.bg i:nth-child(2) { --c: var(--blob-2); width: 82vmax; height: 50vmax; bottom: -20vmax; right: -24vmax;
+  opacity: .5;  animation: drift-b 47s ease-in-out infinite alternate; }
+.bg i:nth-child(3) { --c: var(--blob-3); width: 60vmax; height: 38vmax; top: 34%; left: -16vmax;
+  opacity: .45; animation: drift-c 53s ease-in-out infinite alternate; }
+.bg i:nth-child(4) { --c: var(--blob-4); width: 42vmax; height: 28vmax; top: 6%; right: -6vmax;
+  opacity: .24; animation: drift-d 37s ease-in-out infinite alternate; }
+
+.bg::after {              /* the blur layer sitting over the colour fields */
   content: "";
   position: absolute;
   inset: 0;
+  z-index: 1;
   background: var(--veil);
-  -webkit-backdrop-filter: blur(70px) saturate(1.2);
-  backdrop-filter: blur(70px) saturate(1.2);
+  -webkit-backdrop-filter: blur(40px) saturate(1.6);
+  backdrop-filter: blur(40px) saturate(1.6);
+}
+.bg::before {             /* fine grain above the blur: hides gradient banding, adds depth */
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  opacity: var(--grain);
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .bg i { filter: blur(70px); }
-  .bg::after { background: color-mix(in srgb, var(--bg) 70%, transparent); }
+  .bg i { filter: blur(30px); }
 }
-@keyframes drift-a { to { transform: translate3d(35vmax, 25vmax, 0) scale(1.15); } }
-@keyframes drift-b { to { transform: translate3d(-40vmax, -20vmax, 0) scale(.9); } }
-@keyframes drift-c { to { transform: translate3d(-25vmax, 30vmax, 0) scale(1.25); } }
+@media (prefers-reduced-transparency: reduce) {
+  .bg::after { -webkit-backdrop-filter: none; backdrop-filter: none; background: var(--bg); opacity: .8; }
+}
+
+@keyframes drift-a {
+  0%   { transform: translate3d(0, 0, 0) rotate(-18deg) scale(1); }
+  50%  { transform: translate3d(34vmax, 14vmax, 0) rotate(8deg) scale(1.15); }
+  100% { transform: translate3d(12vmax, 36vmax, 0) rotate(-4deg) scale(.95); }
+}
+@keyframes drift-b {
+  0%   { transform: translate3d(0, 0, 0) rotate(14deg) scale(1); }
+  50%  { transform: translate3d(-38vmax, -16vmax, 0) rotate(-10deg) scale(1.12); }
+  100% { transform: translate3d(-14vmax, -34vmax, 0) rotate(6deg) scale(.92); }
+}
+@keyframes drift-c {
+  0%   { transform: translate3d(0, 0, 0) rotate(24deg) scale(1); }
+  50%  { transform: translate3d(46vmax, -10vmax, 0) rotate(-6deg) scale(1.2); }
+  100% { transform: translate3d(70vmax, 12vmax, 0) rotate(16deg) scale(1); }
+}
+@keyframes drift-d {
+  0%   { transform: translate3d(0, 0, 0) rotate(-30deg) scale(1); }
+  100% { transform: translate3d(-44vmax, 40vmax, 0) rotate(12deg) scale(1.3); }
+}
 @media (prefers-reduced-motion: reduce) {
   .bg i { animation: none; }
 }
