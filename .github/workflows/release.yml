@@ -1,0 +1,46 @@
+name: Release
+
+# Every push to main (i.e. every change to the list) publishes a new
+# GitHub Release with an auto-generated date-based tag, e.g. v2026.11.23-7.
+# Can also be run by hand from the Actions tab.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compute tag
+        run: echo "TAG=v$(date -u +%Y.%m.%d)-${GITHUB_RUN_NUMBER}" >> "$GITHUB_ENV"
+
+      - name: Build site
+        uses: actions/jekyll-build-pages@v1
+        with:
+          source: ./
+          destination: ./_site
+
+      - name: Package
+        run: |
+          sudo chown -R "$USER":"$USER" _site
+          (cd _site && zip -r "../wishlist-site-${TAG}.zip" .)
+          git archive --format=zip --prefix="wishlist-${TAG}/" -o "wishlist-source-${TAG}.zip" HEAD
+
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$TAG" \
+            "wishlist-site-${TAG}.zip" "wishlist-source-${TAG}.zip" \
+            --target "$GITHUB_SHA" \
+            --title "Wishlist $TAG" --generate-notes
