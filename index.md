@@ -5,16 +5,16 @@ title: Sean's Christmas/Birthday List
 
 # Sean's Christmas/Birthday List
 
-*Updated 2025. This list may change.*
+*Updated 2026. This list may update in the future.*
 
 ## Tech and gadgets
 
-- Galaxy Watch or [Core Time 2](https://store.repebble.com/)
 - Framework 16 laptop, 32 GB RAM + GPU [Framework](https://frame.work/products/laptop16-diy-amd-7040){: .chip}
 - Flipper Zero [official store](https://shop.flipperzero.one/){: .chip}
 - [Kiisu](https://kiisu.io/)
 - [Coral USB TPU](https://coral.ai/products/accelerator)
 - UGREEN FineTrack Duo 2 UWB tracker for Android [Amazon](https://www.amazon.com/dp/B0G93FF2C5){: .chip}
+- HIRDREALITY smart plugs, 4-pack, 15A [Amazon](https://www.amazon.com/dp/B09KNDM4VV){: .chip}
 
 ## Electronics and soldering
 
@@ -24,12 +24,19 @@ title: Sean's Christmas/Birthday List
 - Soldering flux, no-clean paste [Amazon](https://www.amazon.com/s?k=no+clean+flux+paste){: .chip}
 - Silicone soldering mat [Amazon](https://www.amazon.com/dp/B0H2WFXC53){: .chip}
 - XT60 connector pack with sheaths [Amazon](https://www.amazon.com/dp/B07Y37X6L7){: .chip}
+- 120-pc alligator clip set, test probes and leads [Amazon](https://www.amazon.com/dp/B0CX8Q4JXG){: .chip}
+- 7-size heat shrink tubing kit, 4:1 adhesive-lined [Amazon](https://www.amazon.com/dp/B0FRNM2MR5){: .chip}
+- ICONN 100-pc nylon spade connector kit [Amazon](https://www.amazon.com/dp/B0GHN53JSP){: .chip}
 
 ## Radio
 
 - K1 radio programming cable with an FTDI or CH340 chip, not Prolific [Amazon](https://www.amazon.com/dp/B078T5KZSH){: .chip}
 - Dual-band (2 m / 70 cm) NMO antenna for my Jeep [Amazon](https://www.amazon.com/dp/B00SU0W3XO){: .chip}
 - SMA to BNC adapter kit [Amazon](https://www.amazon.com/dp/B0F6YC34B6){: .chip}
+
+## Automotive
+
+- AutoLine Pro HyperSmoke automotive smoke machine (EVAP / vacuum leak tester) [Amazon](https://www.amazon.com/dp/B0DNRY9NCV){: .chip}
 
 ## Cameras and audio
 
