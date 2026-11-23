@@ -50,7 +50,7 @@ title: Sean's Christmas/Birthday List
 ## Clothes
 
 - Nice sweatshirts (black, grey)
-- Milwaukee heated hoodie *sold out*{: .tag} [Red Tool Store](https://www.redtoolstore.com/products/milwaukee-306b-20-m12-heated-hoodie-black-hoodie-only){: .chip}
+- Milwaukee heated hoodie [Red Tool Store](https://www.milwaukeetool.com/products/details/m12-heated-full-zip-hoodie/m200b-202x){: .chip}
 
 ## Snacks
 
