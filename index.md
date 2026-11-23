@@ -26,7 +26,7 @@ title: Sean's Christmas/Birthday List
 - XT60 connector pack with sheaths [Amazon](https://www.amazon.com/dp/B07Y37X6L7){: .chip}
 - 120-pc alligator clip set, test probes and leads [Amazon](https://www.amazon.com/dp/B0CX8Q4JXG){: .chip}
 - 7-size heat shrink tubing kit, 4:1 adhesive-lined [Amazon](https://www.amazon.com/dp/B0FRNM2MR5){: .chip}
-- TICONN 100-pc nylon spade connector kit [Amazon](https://www.amazon.com/dp/B0GHN53JSP){: .chip}
+- TICONN 100-pc nylon spade connector kit [Amazon](https://www.amazon.com/dp/B08BZ9BPQ4){: .chip}
 
 ## Radio
 
