@@ -7,8 +7,9 @@
   - Background: four soft, elongated colour fields (amber, ember, teal, gold) drifting slowly over the
     near-black, a moderate backdrop blur over them, and a fine grain on top. Colour comes from the fields
     themselves, with only a light veil, so it stays rich instead of washing out.
-    Two layers of motion: a slow idle drift that never stops, and extra travel tied to scroll position
-    (down plays the scene forward, up plays it back) that also speeds the drift up while you scroll.
+    Motion is one continuous, random-looking path (sums of slow sine waves, seeded per visit). Time moves
+    you slowly forward along it; scrolling moves you along it too (down = forward, up = the same route
+    backwards, exactly). A soft scrim behind the text column and deep, darker hues keep text readable.
     Static for reduced-motion.
 */
 :root {
@@ -19,11 +20,12 @@
   --rule: rgb(240 237 228 / .16);
   --accent: #ffb000;
   --danger: #ff8577;
-  --blob-1: #e08a00;
-  --blob-2: #d4461f;
-  --blob-3: #0f8a80;
-  --blob-4: #f2c14e;
+  --blob-1: #c47a00;
+  --blob-2: #bf3d1b;
+  --blob-3: #0c7a71;
+  --blob-4: #d9a93f;
   --veil: rgb(14 14 12 / .14);
+  --scrim: rgb(14 14 12 / .26);
   --grain: .11;
   --mono: ui-monospace, "SF Mono", "Cascadia Mono", "JetBrains Mono", Menlo, Consolas, monospace;
   --sans: "Helvetica Neue", Helvetica, Arial, "Segoe UI", Roboto, sans-serif;
@@ -41,6 +43,7 @@
     --blob-3: #34b5aa;
     --blob-4: #ffd166;
     --veil: rgb(243 241 236 / .14);
+    --scrim: rgb(243 241 236 / .30);
     --grain: .16;
   }
 }
@@ -65,47 +68,28 @@ body {
   background: var(--bg);
 }
 /* colour fields: radial gradients already fade to transparent, so no filter is needed
-   on them (filter: blur on big moving layers is the expensive way to do this) */
+   on them (filter: blur on big moving layers is the expensive way to do this).
+   Their transform is set every frame by the script in the layout. */
 .bg i {
   position: absolute;
   z-index: 0;
-  will-change: transform;
-  /* scroll layer: paused 1s animation; --p (0..1, set from scroll) picks the frame via a negative delay */
-  animation-duration: 1s;
-  animation-timing-function: linear;
-  animation-fill-mode: both;
-  animation-play-state: paused;
-  animation-delay: calc(var(--p, 0) * -1s);
-}
-.bg i:nth-child(1) { --c: var(--blob-1); width: 78vmax; height: 52vmax; top: -14vmax; left: -22vmax;
-  opacity: .55; animation-name: drift-a; }
-.bg i:nth-child(2) { --c: var(--blob-2); width: 82vmax; height: 50vmax; bottom: -20vmax; right: -24vmax;
-  opacity: .5;  animation-name: drift-b; }
-.bg i:nth-child(3) { --c: var(--blob-3); width: 60vmax; height: 38vmax; top: 34%; left: -16vmax;
-  opacity: .45; animation-name: drift-c; }
-.bg i:nth-child(4) { --c: var(--blob-4); width: 42vmax; height: 28vmax; top: 6%; right: -6vmax;
-  opacity: .24; animation-name: drift-d; }
-
-/* idle layer: always drifting, independent of scroll; the script speeds it up while scrolling */
-.bg i::before {
-  content: "";
-  position: absolute;
-  inset: 0;
   border-radius: 50%;
   background: radial-gradient(closest-side, var(--c), transparent);
   will-change: transform;
-  animation: idle-a 29s ease-in-out infinite alternate;
 }
-.bg i:nth-child(2)::before { animation-name: idle-b; animation-duration: 35s; }
-.bg i:nth-child(3)::before { animation-name: idle-c; animation-duration: 43s; }
-.bg i:nth-child(4)::before { animation-name: idle-d; animation-duration: 31s; }
+.bg i:nth-child(1) { --c: var(--blob-1); width: 78vmax; height: 52vmax; top: -14vmax; left: -22vmax; opacity: .55; }
+.bg i:nth-child(2) { --c: var(--blob-2); width: 82vmax; height: 50vmax; bottom: -20vmax; right: -24vmax; opacity: .5; }
+.bg i:nth-child(3) { --c: var(--blob-3); width: 60vmax; height: 38vmax; top: 34%; left: -16vmax; opacity: .45; }
+.bg i:nth-child(4) { --c: var(--blob-4); width: 42vmax; height: 28vmax; top: 6%; right: -6vmax; opacity: .2; }
 
 .bg::after {              /* the blur layer sitting over the colour fields */
   content: "";
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: var(--veil);
+  background:
+    linear-gradient(to right, transparent, var(--scrim) calc(50% - 26rem), var(--scrim) calc(50% + 26rem), transparent),
+    var(--veil);
   -webkit-backdrop-filter: blur(40px) saturate(1.6);
   backdrop-filter: blur(40px) saturate(1.6);
 }
@@ -125,50 +109,7 @@ body {
   .bg::after { -webkit-backdrop-filter: none; backdrop-filter: none; background: var(--bg); opacity: .8; }
 }
 
-@keyframes drift-a {
-  0%   { transform: translate3d(0, 0, 0) rotate(-18deg) scale(1); }
-  50%  { transform: translate3d(48vmax, 20vmax, 0) rotate(10deg) scale(1.18); }
-  100% { transform: translate3d(17vmax, 50vmax, 0) rotate(-6deg) scale(.95); }
-}
-@keyframes drift-b {
-  0%   { transform: translate3d(0, 0, 0) rotate(14deg) scale(1); }
-  50%  { transform: translate3d(-52vmax, -22vmax, 0) rotate(-12deg) scale(1.15); }
-  100% { transform: translate3d(-20vmax, -48vmax, 0) rotate(8deg) scale(.9); }
-}
-@keyframes drift-c {
-  0%   { transform: translate3d(0, 0, 0) rotate(24deg) scale(1); }
-  50%  { transform: translate3d(64vmax, -14vmax, 0) rotate(-8deg) scale(1.25); }
-  100% { transform: translate3d(96vmax, 16vmax, 0) rotate(18deg) scale(1); }
-}
-@keyframes drift-d {
-  0%   { transform: translate3d(0, 0, 0) rotate(-30deg) scale(1); }
-  100% { transform: translate3d(-60vmax, 54vmax, 0) rotate(14deg) scale(1.35); }
-}
-/* idle drift: percentages are of each field's own size, so it scales with the field */
-@keyframes idle-a {
-  0%   { transform: translate(0, 0) rotate(0deg) scale(1); }
-  50%  { transform: translate(14%, 9%) rotate(7deg) scale(1.1); }
-  100% { transform: translate(-9%, 16%) rotate(-5deg) scale(.95); }
-}
-@keyframes idle-b {
-  0%   { transform: translate(0, 0) rotate(0deg) scale(1); }
-  50%  { transform: translate(-15%, -8%) rotate(-8deg) scale(1.12); }
-  100% { transform: translate(10%, -15%) rotate(5deg) scale(.94); }
-}
-@keyframes idle-c {
-  0%   { transform: translate(0, 0) rotate(0deg) scale(1); }
-  50%  { transform: translate(18%, -10%) rotate(9deg) scale(1.15); }
-  100% { transform: translate(-6%, 14%) rotate(-6deg) scale(.92); }
-}
-@keyframes idle-d {
-  0%   { transform: translate(0, 0) rotate(0deg) scale(1); }
-  100% { transform: translate(-22%, 20%) rotate(-12deg) scale(1.25); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .bg i, .bg i::before { animation: none; }
-}
-
-.wrap { position: relative; max-width: 36rem; margin: 0 auto; padding: 48px 22px 112px; }
+.wrap { position: relative; text-shadow: 0 0 18px var(--bg); max-width: 36rem; margin: 0 auto; padding: 48px 22px 112px; }
 
 h1 {
   margin: 0 0 16px;
