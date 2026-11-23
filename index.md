@@ -14,7 +14,7 @@ title: Sean's Christmas/Birthday List
 - [Kiisu](https://kiisu.io/)
 - [Coral USB TPU](https://coral.ai/products/accelerator)
 - UGREEN FineTrack Duo 2 UWB tracker for Android [Amazon](https://www.amazon.com/dp/B0G93FF2C5){: .chip}
-- HIRDREALITY smart plugs, 4-pack, 15A [Amazon](https://www.amazon.com/dp/B09KNDM4VV){: .chip}
+- THIRDREALITY smart plugs, 4-pack, 15A [Amazon](https://www.amazon.com/dp/B09KNDM4VV){: .chip}
 
 ## Electronics and soldering
 
@@ -26,7 +26,7 @@ title: Sean's Christmas/Birthday List
 - XT60 connector pack with sheaths [Amazon](https://www.amazon.com/dp/B07Y37X6L7){: .chip}
 - 120-pc alligator clip set, test probes and leads [Amazon](https://www.amazon.com/dp/B0CX8Q4JXG){: .chip}
 - 7-size heat shrink tubing kit, 4:1 adhesive-lined [Amazon](https://www.amazon.com/dp/B0FRNM2MR5){: .chip}
-- ICONN 100-pc nylon spade connector kit [Amazon](https://www.amazon.com/dp/B0GHN53JSP){: .chip}
+- TICONN 100-pc nylon spade connector kit [Amazon](https://www.amazon.com/dp/B0GHN53JSP){: .chip}
 
 ## Radio
 
